@@ -35,7 +35,7 @@
     Логин: `airflow`  
     Пароль: `airflow`
 
-## Скриншоты | Screenshots
+## Скриншоты
 
 1.  Запущенные контейнеры
     ![docker](./images/docker-ps.png)
@@ -47,7 +47,7 @@
     ![dag](./images/graph.png)
 
 
-### Структура проекта | Project Structure
+### Структура проекта
 
 ```bash
 airflow-lab/
@@ -56,7 +56,7 @@ airflow-lab/
         └──input.txt
     └── output/             # Папка с output-файлом
         └──output.txt
-    └── word_count_dag.py   # Пример DAG
+    └── dag.py              # Пример DAG
 │── imgages/                # Папка с изображениями для документации
 │── Dockerfile              # Конфигурация Docker-образа
 │── docker-compose.yml      # Конфигурация Docker Compose
