@@ -1,69 +1,64 @@
-# Word Count
+# Лабораторная работа 1: Airflow + Docker Compose
+# Lab 1: Airflow + Docker Compose
 
-Проект с DAG для Apache Airflow & Docker Compose, который читает текст из файла, считает слова и выводит результат.
+---
 
+## Установка
+1.  Убедитесь, что установлены **Docker** и **Docker Compose**.  
 
+2.  Клонируйте репозиторий:
 
-## Содержимое
+    ```sh
+    git clone https://github.com/Evgeninio/DevOpsAITH.git
+    cd DevOpsAITH
 
-```
-itmo-2sem-devops/
-├── dags/
-│   ├── word_count_dag.py  
-│   ├── input/             
-│   └── output/            
-├── Dockerfile             
-├── docker-compose.yml     
-└── README.md              
-```
+    ```
 
+## Запуск
 
-## Описание DAG
+1.  Запустите Airflow с помощью Docker Compose:
 
-1. **`read_input_text_task`:** Читает текст из `input/input.txt`.
-2. **`print_input_text_task`:** Выводит текст в лог.
-3. **`count_words_task`:** Считает слова, выводит кол-во в лог и записывает его в `output/output.txt`.
+    ```sh
+    docker-compose up -d
+    ```
 
+2.  Проверьте, запущены ли контейнеры:
 
-## Как запустить
+    ```sh
+    docker ps
+    ```
 
-1. Клонируйте репозиторий:
-   ```bash
-   git clone https://gitlab.com/countercurrent1/itmo-2sem-devops.git
-   cd itmo-2sem-devops
-   ```
+3.  Перейдите в веб-интерфейс Airflow:
 
-2. Добавьте текст в файл:
-   ```bash
-   echo "Например, это текст из шести слов." > dags/input/input.txt
-   ```
+    [http://localhost:8080/](http://localhost:8080/)
 
-3. Запустите контейнеры, проверьте что у всех статус healthy:
-   ```bash
-   docker-compose up -d
-   docker ps
-   ```
-
-4. Откройте Airflow: `http://localhost:8080` (логин: `airflow`, пароль: `airflow`).
-
-5. Запустите DAG `word_count` и проверьте логи + вывод в output файле.
-
+    Логин: `airflow`  
+    Пароль: `airflow`
 
 ## Скриншоты | Screenshots
 
-1.  Запущенные контейнеры | Running Containers
-    ![docker](/dags/images/containers.png)
+1.  Запущенные контейнеры
+    ![docker](./images/docker-ps.png)
 
-2.  Список DAG-ов | DAGs List
-    ![dags](/dags/images/dags.png)
+2.  Список DAG-ов
+    ![dags](./images/dags.png)
 
-3.  Информация о DAG | DAG Info
-    ![dag](/dags/images/dag_info.png)
+3.  Информация о DAG
+    ![dag](./images/graph.png)
 
 
-## Остановка
+### Структура проекта | Project Structure
 
 ```bash
-docker-compose down
+airflow-lab/
+│── dags/                   # Папка с DAG-ами
+│   └── input/              # Папка с input-файлом
+        └──input.txt
+    └── output/             # Папка с output-файлом
+        └──output.txt
+    └── word_count_dag.py   # Пример DAG
+│── imgages/                # Папка с изображениями для документации
+│── Dockerfile              # Конфигурация Docker-образа
+│── docker-compose.yml      # Конфигурация Docker Compose
+│── README.md               # Этот файл
 ```
-
