@@ -1,6 +1,2 @@
-test.py
-.venv
-config/
-plugins/
-dags/__pycache__/
 logs/
+dags/__pycache__

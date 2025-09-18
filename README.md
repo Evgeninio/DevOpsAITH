@@ -1,64 +1,78 @@
-# Лабораторная работа 1: Airflow + Docker Compose
-# Lab 1: Airflow + Docker Compose
 
----
+# Spark Stats Pipeline
 
-## Установка
-1.  Убедитесь, что установлены **Docker** и **Docker Compose**.  
+Проект с простым DAG, который использует Docker Compose и Spark для вычислений.  
+Airflow управляет запуском Spark-задачи, которая считает статистику и сохраняет результат в JSON.
 
-2.  Клонируйте репозиторий:
 
-    ```sh
-    git clone https://github.com/Evgeninio/DevOpsAITH.git
-    cd DevOpsAITH
+## Содержимое
 
-    ```
+```
+itmo-2sem-devops/
+├── dags/
+│ ├── count_dag.py
+├── spark/
+│ ├── spark_task.py
+│ ├── spark_stats.py
+├── logs/
+├── Dockerfile
+├── docker-compose.yml
+└── README.md           
+```
 
-## Запуск
 
-1.  Запустите Airflow с помощью Docker Compose:
+## Описание DAG и spark-job
 
-    ```sh
-    docker-compose up -d
-    ```
+1. **DAG `count_spark`**:
+   - запускает Spark-задачу `spark_stats.py`;
+   - ждёт появления результата (JSON-файл);
+   - читает его и выводит статистику в лог, а также сохраняет в XCom.
 
-2.  Проверьте, запущены ли контейнеры:
+2. **Spark-задача `spark_stats.py`**:
+   - генерирует случайные числа (или может читать CSV с колонкой `value`);
+   - считает агрегаты:
+     - количество (`count`)
+     - сумму (`sum`)
+     - среднее (`avg`)
+     - минимум (`min`)
+     - максимум (`max`)
+     - медиану (`median`)
+   - сохраняет результат в JSON: `/opt/airflow/spark/output/stats_<timestamp>.json`.
 
-    ```sh
-    docker ps
-    ```
 
-3.  Перейдите в веб-интерфейс Airflow:
+## Как запустить
 
-    [http://localhost:8080/](http://localhost:8080/)
+1. Клонируйте репозиторий:
 
-    Логин: `airflow`  
-    Пароль: `airflow`
+2. Запустите контейнеры:
+   ```bash
+   docker-compose up -d
+   docker ps
+   ```
+
+3. Откройте Airflow: `http://localhost:8080` (логин: `airflow`, пароль: `airflow`).
+
+4. Добавьте соединение:
+Conn Id: spark_local
+Conn Type: Spark
+Host: spark-master
+Port: 7077
+
+5. Запустите DAG `count_dag` и проверьте логи.
+
+
+
+## Остановка
+
+```bash
+docker-compose down -v
+```
+
 
 ## Скриншоты
 
-1.  Запущенные контейнеры
-    ![docker](./images/docker-ps.png)
+![alt text](1.png)
 
-2.  Список DAG-ов
-    ![dags](./images/dags.png)
+![alt text](2.png)
 
-3.  Информация о DAG
-    ![dag](./images/graph.png)
-
-
-### Структура проекта
-
-```bash
-airflow-lab/
-│── dags/                   # Папка с DAG-ами
-│   └── input/              # Папка с input-файлом
-        └──input.txt
-    └── output/             # Папка с output-файлом
-        └──output.txt
-    └── dag.py              # Пример DAG
-│── imgages/                # Папка с изображениями для документации
-│── Dockerfile              # Конфигурация Docker-образа
-│── docker-compose.yml      # Конфигурация Docker Compose
-│── README.md               # Этот файл
-```
+![alt text](3.png)
